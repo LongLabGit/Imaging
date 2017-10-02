@@ -71,7 +71,7 @@ for trialInd=1:length(egFile)
         audio=d(:,2)/max(abs(d(:,2)));%get the audio, normalize to 1
 
         %use this info to find tiff numbers
-        [~,stopInd,tiffInd]=getTiffInds(d(:,1),d(:,3),Fs);
+        [~,stopInd,tiffInd,imagingPeriod]=getTiffInds(d(:,1),d(:,3),Fs);
         i=Tiff([folder,'1-Orig\',fname,'.tif'],'r');
         try 
             i.setDirectory(length(tiffInd));
@@ -193,7 +193,7 @@ for trialInd=1:length(egFile)
                     else
                         wi=wi+1;
                     end
-                end;
+                end
             end
             alignPts=params.Warp(wi,:);
             align=params.Warp(wi,1);
@@ -218,7 +218,7 @@ for trialInd=1:length(egFile)
                 %frames we want to take out & their time
                 Motif(motifInd).frames=[f,l];%frame numbers within the trial tiff, extended a bit before and after
                 Motif(motifInd).frameTimes=(tiffInd(f:l)-refLoc)/Fs;%the original number
-
+                Motif(motifInd).imagingP=imagingPeriod/Fs;
                 %lineLocs starts as referenced to the beginning of the audio.
                 %subtract off the reference point (good(1))so it is at 0
                 Motif(motifInd).EguiTimes=(lineLocs-lineLocs(align))/Fs;

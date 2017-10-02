@@ -21,6 +21,7 @@ resizeANDjoin(folder, Motif, 480);%change the progress report on this one
 %% Motion correct across motifs
 maxShift=10;ref=8;%choose brightest sharpest plane for ref, 20px max shift is standard
 MotC_AVGs(folder,Motif,maxShift,ref);
+Motif=calcShift(Motif);
 save([folder,'ABF_Used.mat'],'Motif')%if you remove some motifs manually (like Motifs(1:5)=[]), then you need to save the updated one
 %% Draw ROIs
 %At this point, you need to draw rois on the motc avg'd files

@@ -1,4 +1,4 @@
-function [startInd,stopInd,tiffInd]=getTiffInds(galvo,glass,Fs)
+function [startInd,stopInd,tiffInd,imagingPeriod]=getTiffInds(galvo,glass,Fs)
 
 tiffSig=galvo/max(galvo);%d(:,1) holds the frame onset offset
 tiffSig=tiffSig>.1;
@@ -19,6 +19,7 @@ if length(startInd)>length(stopInd)
 end
 
 tiffInd=(startInd+stopInd)/2;
+imagingPeriod=median(stopInd-startInd);
 %here we need to account for the fact that michel likes to randomly
 %image the plane. so we need to onnly take the imaging block that has
 %glass within it. but he also might start imaging after glass. so we
@@ -48,4 +49,4 @@ if ~isempty(breaks)
 end
 %The period varies slightly. this will never be output, but you can
 %always gutcheck it here
-P=unique(deltaI);
+% P=unique(deltaI);
