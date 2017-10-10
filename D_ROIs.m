@@ -2,7 +2,7 @@ clear;clc;close all;
 addpath('Fcns\TiffFcns\');
 addpath('Fcns\ROIFcns\');
 set(0,'DefaultFigureWindowStyle','docked')
-folder='Data\348\';
+folder='A:\Felix\ImagingAnalysisFelix\Data\402\';
 %% Run Extraction
 % Extract all planes (SUBPLANES TOO), piecewise
 load([folder,'ABF_Used.mat'],'Motif')%if you remove some motifs manually (like Motifs(1:5)=[]), then you need to save the updated one
