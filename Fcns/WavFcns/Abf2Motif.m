@@ -1,5 +1,6 @@
 function [Motif,params]=Abf2Motif(folder,syllID)
 
+%git test
 %INPUT
     %folder: where all your data is located
     %params: 
