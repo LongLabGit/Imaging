@@ -1,0 +1,12 @@
+function normalizeSpatialBrightness(obj)
+
+ims = obj.images;
+flt = fspecial('gauss',50,15);
+
+for ff = 1:size(ims,4)
+    
+    % get average brightness at each pixel
+    meanBright = conv2(ims(:,:,:,ff),flt,'same');
+    
+    % divide by this brightness
+    ims(:,:,:,ff) 

@@ -5,13 +5,13 @@ function [samples_s, trials, mcmc,paramOD]  = sampleSpikes2_init(CaF,tau, Tguess
 %this is accounted for by calciumNoiseVar
 
 calciumNoiseVar_init=.3; %inial noise estimate, michel:.3
-p_spike=3/40;%what percent of the bins hacve a spike in then
+p_spike=3/40;%what percent of the bins hacve a spike in then standard:3/40;
 proposalVar=1;%likeliness to accept moves
 nsweeps=4000; %number of sweeps of sampler, standard: 4000
 % if acceptance rates are too high, increase proposal width, 
 % if too low, decrease them (for time moves, tau, amplitude)
 % tau_std = 1;
-tau_std = [1.5,1.5]; %proposal variance of tau parameters (standard: [2,2])
+tau_std = [.5,.5]; %proposal variance of tau parameters (standard: [2,2])
 tau_min=0.05;
 tau_max=[15,15]; %5,5
 % tau_max=[4,4];
@@ -23,8 +23,8 @@ b_std = .3; %propasal variance of baseline
 b_min = 0;
 b_max = 5;
 exclusion_bound = .05;%dont let bursts get within x bins of eachother. this should be in time
-maxNbursts =4;%standard: 4; if we want to add bursts, whats the maximum bnumber that we will look for?
-minNburst=1;
+maxNbursts =2;%standard: 4; if we want to add bursts, whats the maximum bnumber that we will look for?
+minNburst=3;
 %doesnt mattera
 Dt=1; %bin unit - don't change this
 A=400; % scale factor for all magnitudes for this calcium data setup

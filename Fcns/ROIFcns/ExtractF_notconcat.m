@@ -4,13 +4,20 @@ rois=ReadImageJROI([folder,'ROIs\RoiSet.zip']);
 rois=cell2mat(rois);
 roiNames={rois(:).strName};
 disp(['Extracting ' folder ', ' num2str(length(Motif)) ' motifs'])
-Cell=struct('f',{},'name',{},'cellN',[],'patch',[],'inds',[],);
+Cell=struct('f',{},'name',{},'cellN',[],'patch',[],'inds',[]);
+if ~isfield(Motif,'imagingP')
+    disp('using standard imaging period of 34 milliseconds')
+end
 for m=1:length(Motif)
     fn=Motif(m).name;%name of motif
     moShift=Motif(m).hor_vert(2);%horizatonal and vertical alignment of the motion corrected aligned tiff to the original tiff
     %this is useful for knowing the effect of line scan time 
     totalLines=Motif(m).totalLines;%total lines in original tiff. use this to calculated effect of location. 
-    imagingP=Motif(m).imagingP*Motif(m).warpFactor;
+    if isfield(Motif,'imagingP')
+        imagingP=Motif(m).imagingP*Motif(m).warpFactor;
+    else
+        imagingP=.034*Motif(m).warpFactor;
+    end
     Y = tiff_reader_new([folder, '5-FinalMotifs\' fn],0,0);%turn this into Tiff
     %now create the pixels struct corresponding to the frame number
     nF=size(Y,3);

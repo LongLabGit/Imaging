@@ -66,9 +66,9 @@ indM=[0,cumsum(nm)];
 time=nan(sum(nm),max(nf));
 traces=nan(sum(nm),max(nf));
 plotI=1;
-for c=1:length(inds)
-    t=tCell{c};
-    s=sCell{c};
+for c=1:length(inds)%for every roi that belongs to this cell
+    t=tCell{c};%get the time vector
+    s=sCell{c};%get the flourescence
     time(indM(c)+1:indM(c+1),1:nf(c))=t;
     traces(indM(c)+1:indM(c+1),1:nf(c))=s;
     if normalize
@@ -78,14 +78,32 @@ for c=1:length(inds)
     if binCheck
         t=repmat(1:size(s,2),size(s,1),1);
     end
-    if plotit
-        for trial=1:size(t,1)
-            plot(t(trial,:),s(trial,:),'color',col(indCol(plotI),:));
-            plotI=plotI+1;
-        end
+end
+%fix alignment issues
+rmL=time<max(min(time,[],2));
+rmR=time>(min(max(time,[],2)));
+time(rmL|rmR)=NaN;
+traces(rmL|rmR)=NaN;
+for trial=1:size(time,1)
+    ti=time(trial,:);
+    n=isnan(ti);
+    if n(1)
+        time(trial,1:sum(~n))=time(trial,~n);%move to the left
+        time(trial,(sum(~n)+1):end)=NaN;%delete doubles
+        traces(trial,1:sum(~n))=traces(trial,~n);
+        traces(trial,(sum(~n)+1):end)=NaN;
     end
 end
+% rmC=sum(isnan(time))>0;%same number of columns, 
+rmC=sum(isnan(time))==size(time,1);
+time(:,rmC)=[];
+traces(:,rmC)=[];
+
 if plotit
+     for trial=1:size(time,1)
+        plot(time(trial,:),traces(trial,:),'color',col(indCol(plotI),:));
+        plotI=plotI+1;
+    end
     title([cellstr(num2str(inds'))]);
     legend(keptTrials);
 end

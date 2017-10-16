@@ -10,6 +10,8 @@ files=dir([folder,'ABF\*.abf']);%findall the files in the work space
 files={files.name};
 makeWavs(folder,files,5);
 %% at this stage, go into electro gui and label everything
+%Make sure you have a template
+MotifEditor
 %% Convert raw data into manageable motif times
 [Motif,params]=Abf2Motif(folder,'s'); % Will automatically save
-Motif=WarpMotifs(folder,Motif,params,100,100); % Align and warp time points
+% Motif=WarpMotifs(folder,Motif,params,100,100); % Align and warp time points

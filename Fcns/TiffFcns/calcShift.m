@@ -1,5 +1,6 @@
 function Motif=calcShift(origFolder,newFolder,Motif)
 %%
+h=waitbar(0,'Recalculating alignment');
 for m=1:length(Motif)
     %get image names
     origT=[origFolder,'1-Orig\' Motif(m).Origname];
@@ -15,7 +16,10 @@ for m=1:length(Motif)
 
     Motif(m).hor_vert=tform.T(3,1:2);
     Motif(m).shiftScore=corr2(test,oldI);
-    if any(Motif(m).hor_vert<-1)||Motif(m).shiftScore<.6%negative pixel loss or low final match 
+    if any(Motif(m).hor_vert<-1)||Motif(m).shiftScore<.4%negative pixel loss or low final match 
+        subplot(121);imagesc(oldI);axis square;subplot(122);imagesc(test);axis square;%plot for gutcheck
         error('how is that even possible. get Vigi. if you are vigi, do a better job you idiot')
     end
+    waitbar(m/length(Motif))
 end
+delete(h);
