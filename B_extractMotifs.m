@@ -1,17 +1,13 @@
 clear; clc;
-addpath('Fcns\WavFcns');
+addpath('A:\Felix\Imaging\Fcns\WavFcns');
 set(0,'DefaultFigureWindowStyle','docked')
-folder='Data\383 Butons\';
-if ~isdir([folder,'Notes'])
-    mkdir(folder,'Notes')
-end
+folder='Data\402\';
+threshold=.9;%for template matching
 %% Make Wav (folder + files)
-files=dir([folder,'ABF\*.abf']);%findall the files in the work space
-files={files.name};
-makeWavs(folder,files,5);
-%% at this stage, go into electro gui and label everything
-%Make sure you have a template
-MotifEditor
+makeWavs(folder,5,threshold); %...,5,... add 5 seconds from curtain down on
+%% make template
+addpath(genpath('A:\Felix\MotifFinder'))
+run('MotifEditor.m')
+
 %% Convert raw data into manageable motif times
 [Motif,params]=Abf2Motif(folder,'s'); % Will automatically save
-% Motif=WarpMotifs(folder,Motif,params,100,100); % Align and warp time points
