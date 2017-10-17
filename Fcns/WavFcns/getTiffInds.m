@@ -1,4 +1,4 @@
-function [startInd,stopInd,tiffInd,imagingPeriod]=getTiffInds(galvo,glass,Fs)
+function [startInd,stopInd,tiffInd,imagingPeriod]=getTiffInds(galvo,Fs,folder,fname)
 
 tiffSig=galvo/max(galvo);%d(:,1) holds the frame onset offset
 tiffSig=tiffSig>.1;
@@ -20,33 +20,71 @@ end
 
 tiffInd=(startInd+stopInd)/2;
 imagingPeriod=median(stopInd-startInd);
+
+%Run a gutcheck
+i=Tiff([folder,'1-Orig\',fname,'.tif'],'r');
+try 
+    i.setDirectory(length(tiffInd));
+    %sometimes it is longer than the actual tiff. if this happens
+    %its ok, we just use the first couple
+catch
+    abfN=length(tiffInd);
+    tiffN=length(imfinfo([folder,'\1-Orig\',fname,'.tif']));
+    disp(abf)
+    error(['tiff is too short!, expected ',num2str(abfN),' got ',num2str(tiffN)])
+end
+if ~i.lastDirectory&&(tiffN>abfN)
+    abfN=length(tiffInd);
+    tiffN=length(imfinfo([folder,'\1-Orig\',fname,'.tif']));
+    disp(abf)
+    error(['tiff is too long, expected ',num2str(abfN),' got ',num2str(tiffN)])
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%will need to repass "glass"
 %here we need to account for the fact that michel likes to randomly
 %image the plane. so we need to onnly take the imaging block that has
 %glass within it. but he also might start imaging after glass. so we
 %look for the start that is closest to the start of the glass
 %breaks will be
-deltaI=diff(tiffInd/Fs);
-breaks=find(deltaI>2)+1;%account for times in which he stops imaging for a bit and then starts again
-if ~isempty(breaks)
-    %turn it into a set of groups
-    groups=zeros(length(breaks)+1,2);
-    groups(1,1)=1;%obviously it needs to start at one
-    %for each break make the previous image the end of the last group and
-    %the first image the beginning of the next
-    for b=1:length(breaks)
-        groups(b,2)=breaks(b)-1;
-        groups(b+1,1)=breaks(b);
-    end
-    groups(length(breaks)+1,2)=length(startInd);%it then needs to end at the end
-    glass=glass/max(glass);
-    glassOn=find(glass>.2,1,'first');%when the glass turns on
-    imagingOn=startInd(groups(:,1));%start of each group of possible images that correspond to the tiff
-    [~,ind]=min(abs(imagingOn-glassOn));%find the closest region
-    tiffInd=tiffInd(groups(ind,1):groups(ind,2));
-    startInd=startInd(groups(ind,1):groups(ind,2));
-    stopInd=stopInd(groups(ind,1):groups(ind,2));
-    deltaI=diff(tiffInd/Fs);
-end
+% deltaI=diff(tiffInd/Fs);
+% breaks=find(deltaI>2)+1;%account for times in which he stops imaging for a bit and then starts again
+% if ~isempty(breaks)
+%     %turn it into a set of groups
+%     groups=zeros(length(breaks)+1,2);
+%     groups(1,1)=1;%obviously it needs to start at one
+%     %for each break make the previous image the end of the last group and
+%     %the first image the beginning of the next
+%     for b=1:length(breaks)
+%         groups(b,2)=breaks(b)-1;
+%         groups(b+1,1)=breaks(b);
+%     end
+%     groups(length(breaks)+1,2)=length(startInd);%it then needs to end at the end
+%     glass=glass/max(glass);
+%     glassOn=find(glass>.2,1,'first');%when the glass turns on
+%     imagingOn=startInd(groups(:,1));%start of each group of possible images that correspond to the tiff
+%     [~,ind]=min(abs(imagingOn-glassOn));%find the closest region
+%     tiffInd=tiffInd(groups(ind,1):groups(ind,2));
+%     startInd=startInd(groups(ind,1):groups(ind,2));
+%     stopInd=stopInd(groups(ind,1):groups(ind,2));
+%     deltaI=diff(tiffInd/Fs);
+% end
 %The period varies slightly. this will never be output, but you can
 %always gutcheck it here
 % P=unique(deltaI);

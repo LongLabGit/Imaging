@@ -33,4 +33,5 @@ disp('done')
 folder=[folder, 'eguiWavs\'];
 threshold=num2str(threshold);
 template=[folder, 'template\template.wav'];
+disp('Move your template to the upper bird folder');
 save StandardPaths.mat folder template threshold
