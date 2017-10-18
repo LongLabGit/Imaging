@@ -17,9 +17,11 @@ songRegion=tempLength*2;
 songRegion=[1,1]*songRegion/2;
 TrialTimes=Motif;%swap names for my mental health. Motif previosly was based on files, now it is based on individual motifs
 Motif=struct('Origname',{},'name',{},'audioF',{},'audioTimes',[],'audioTimesWARP',[],...
-    'frames',[],'frameTimes',[],'frameTimesWARP',[],'imagingP',[],'numI',[],...
+    'frames',[],'frameTimes',[],'frameTimesWARP',[],'imagingPWARP',[],'warpFactor',[],'imagingP',[],'numI',[],...
     'ABFsinging',[],'Tiffsinging',[],'TimeSinging',[],'missingS',[]);
 motifInd=1;
+figure(1);clf;hold on;
+cols=lines(length(TrialTimes));
 for trial=1:length(TrialTimes)
     %get motif labels
     fprintf(num2str(trial));
@@ -70,6 +72,7 @@ for trial=1:length(TrialTimes)
             %frames we want to take out & their time
             Motif(motifInd).frames=[f,l];%frame numbers within the trial tiff, extended a bit before and after
             Motif(motifInd).frameTimes=(tiffInd(f:l)-center(m))/Fs;%the original number
+            
             Motif(motifInd).imagingP=imagingPeriod/Fs;
             %lineLocs starts as referenced to the beginning of the audio.
             %subtract off the reference point (good(1))so it is at 0
@@ -88,14 +91,21 @@ for trial=1:length(TrialTimes)
             Motif(motifInd).audioTimesWARP=Motif(motifInd).audioTimes/warp(m);
             Motif(motifInd).frameTimesWARP=Motif(motifInd).frameTimes/warp(m);
             Motif(motifInd).TimeSingingWARP=Motif(motifInd).TimeSinging/warp(m);
+            Motif(motifInd).imagingPWARP=Motif(motifInd).imagingP/warp(m);
+            Motif(motifInd).warpFactor=warp(m);
+            tWarp=linspace(Motif(motifInd).audioTimesWARP(1),Motif(motifInd).audioTimesWARP(2),length(wav2save));
+%             t=linspace(Motif(motifInd).audioTimes(1),Motif(motifInd).audioTimes(2),length(wav2save));
+            plot(tWarp,wav2save+motifInd,'color',cols(trial,:))
+            line(Motif(motifInd).frameTimesWARP*[1,1],motifInd+[-.5,.5],'color','k');
             %use to set timing
             motifInd=motifInd+1;
         else
             disp(['skipped #',num2str(m),' due to lack of imaging data'])
         end
     end
+    drawnow;
 end
-
+axis tight;
 % names={Motif(:).name};
 % for trial=1:length(names)
 %     name=names{trial};
