@@ -14,7 +14,7 @@ for m=1:length(Motif)
     %this is useful for knowing the effect of line scan time 
     totalLines=Motif(m).totalLines;%total lines in original tiff. use this to calculated effect of location. 
     if isfield(Motif,'imagingP')
-        imagingP=Motif(m).imagingP*Motif(m).warpFactor;
+        imagingP=Motif(m).imagingPWARP;
     else
         imagingP=.034*Motif(m).warpFactor;
     end
