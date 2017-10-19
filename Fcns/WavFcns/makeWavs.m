@@ -4,6 +4,7 @@ function makeWavs(folder,addT,threshold)
 %OUTPUT: it's main 
 if ~exist([folder,'eguiWavs\'],'dir')
     mkdir([folder,'eguiWavs\'])
+    mkdir([folder,'eguiWavs\template\'])
 else
     files2rm=dir([folder,'eguiWavs\*.wav']);
     for f=1:length(files2rm)
