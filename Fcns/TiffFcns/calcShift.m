@@ -1,10 +1,10 @@
-function Motif=calcShift(origFolder,newFolder,Motif)
+function Motif=calcShift(folder,Motif)
 %%
 h=waitbar(0,'Recalculating alignment');
 for m=1:length(Motif)
     %get image names
-    origT=[origFolder,'1-Orig\' Motif(m).Origname];
-    newT=[newFolder,'5-FinalMotifs\' Motif(m).name];
+    origT=[folder,'1-Orig\' Motif(m).Origname];
+    newT=[folder,'5-FinalMotifs\' Motif(m).name];
     newI=double(imread(newT,1));%first frame from new tiff
     minD=min(size(newI));%minimum dimebnsion. THIS IS ONLY FOR CALCULATION NICENESS
     oldI=double(imread(origT,Motif(m).frames(1)));%first indexed frame from old
