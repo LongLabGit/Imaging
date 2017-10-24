@@ -31,4 +31,7 @@ for i=1:length(handles.roiShape)
         handles.roiShapePlot(i)=plot(handles.imgAxes,B(:,2), B(:,1), handles.C{i}, 'LineWidth', 2);
     end
 end
+if strcmp(handles.imgAxes.YDir,'normal')
+    handles.imgAxes.YDir = 'reverse';
+end
 guidata(hObject,handles);

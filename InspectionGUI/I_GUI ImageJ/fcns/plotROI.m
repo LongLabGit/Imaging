@@ -12,4 +12,5 @@ try
     delete(handles.roiPlot(roiSel))
 end
 handles.roiPlot(roiSel)=plot(axx,handles.imgT,handles.roi_trace{r},'color',handles.C{roiSel});
+ylim(axx,[min(handles.roi_trace{r}),max(handles.roi_trace{r})])
 guidata(hObject,handles);
